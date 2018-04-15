@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  db:
+    hostname: db
+    build:
+      context: .
+      dockerfile: ./mysql.Dockerfile
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  guacd:
+    hostname: guacd
+    image: guacamole/guacd:0.9.12-incubating
+    restart: always
+
+  guacamole:
+    # image: guacamole/guacamole:0.9.12-incubating
+    #image: 007397628781.dkr.ecr.us-east-1.amazonaws.com/guacamole/guacamole-web:ejad-9c05a6c9
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - guacd
+      - db
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+volumes:
+  data:
