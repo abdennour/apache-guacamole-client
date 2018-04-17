@@ -16,9 +16,27 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-COMPOSE_PROJECT_NAME=guacamole
-MYSQL_ROOT_PASSWORD=AnyPassword
-MYSQL_DATABASE=guacamole_db
-MYSQL_USER=guacamole_user
-MYSQL_PASSWORD=AnyPassword
-MYSQL_HOSTNAME=db
+version: '3'
+
+services:
+  guacd:
+    hostname: guacd
+    image: guacamole/guacd:0.9.12-incubating
+    restart: always
+  guacamole:
+    # image: guacamole/guacamole:0.9.12-incubating
+    image: 007397628781.dkr.ecr.us-east-1.amazonaws.com/guacamole/guacamole-web:ejad-9c05a6c9
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - guacd
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+volumes:
+  data:
