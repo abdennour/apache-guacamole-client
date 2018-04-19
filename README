@@ -8,7 +8,7 @@ technical users intending to compile parts of Apache Guacamole themselves.
 
 Source archives and pre-built .war files are available from the downloads
 section of the project website:
- 
+
     http://guacamole.incubator.apache.org/
 
 A full manual is available as well:
@@ -57,12 +57,24 @@ and deployed under servlet containers like Apache Tomcat or Jetty.
    You will likely need to do this as root.
 
 
+# Shippment
+
+```
+VERSION=$(git rev-parse --short HEAD);
+docker build -t guacamole-ejad:$VERSION .
+```
+tag it
+
+```
+docker tag guacamole:$VERSION ${AWS_ID}.dkr.ecr.eu-west-1.amazonaws.com/guacamole:$VERSION
+
+```
+
 ------------------------------------------------------------
  Reporting problems
 ------------------------------------------------------------
 
 Please report any bugs encountered by opening a new issue in the JIRA system
 hosted at:
-    
-    https://issues.apache.org/jira/browse/GUACAMOLE/
 
+    https://issues.apache.org/jira/browse/GUACAMOLE/
